@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-12-28T00:16:38+03:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">:3</title><subtitle>me</subtitle><entry><title type="html">Did a little PCG, so you don’t have to.</title><link href="http://localhost:4000/2024/12/27/Did-pcg-so-you-dont-have-to.html" rel="alternate" type="text/html" title="Did a little PCG, so you don’t have to." /><published>2024-12-27T00:00:00+03:00</published><updated>2024-12-27T00:00:00+03:00</updated><id>http://localhost:4000/2024/12/27/Did-pcg-so-you-dont-have-to</id><content type="html" xml:base="http://localhost:4000/2024/12/27/Did-pcg-so-you-dont-have-to.html"><![CDATA[<p>Made a simple PCG Graph, pretending to be “Grass landscape framework 2.0”. You could use this as replacement or use both with conventional method.
+This can cover all collidable surfaces in the world, not only landscapes. 
+Cull by hit phys material and landscape layer, weight distribute meshes, spawn grass from down to up.</p>
+
+<p><img src="/assets/pcggraph.png" alt="PCG Graph" /></p>
+
+<p>I suggest not to up density too high, since PCG stressing Garbage Collector while spawning and destroying instances a bit. That could lead to hitches.
+Everything else is nearly free though.</p>
+
+<p>Also the little silly gif from my game as demonstration.</p>
+
+<p><img src="/assets/pcggifcool.gif" alt="PCG Demonstration" /></p>
+
+<p>Download link, compatible with UE 5.5:
+<a href="(/assets/PCG_InstancedGrass.uasset)">Link</a></p>]]></content><author><name></name></author><summary type="html"><![CDATA[(if you dont want and still wish to be happy)]]></summary></entry><entry><title type="html">State of GTAO in Unreal</title><link href="http://localhost:4000/2024/12/27/GTAO.html" rel="alternate" type="text/html" title="State of GTAO in Unreal" /><published>2024-12-27T00:00:00+03:00</published><updated>2024-12-27T00:00:00+03:00</updated><id>http://localhost:4000/2024/12/27/GTAO</id><content type="html" xml:base="http://localhost:4000/2024/12/27/GTAO.html"><![CDATA[<p>Unreal engine uses its own in-house solution for Screen Space AO, which is, subjectively, not best fit in every case, but what if I told you, there superior gem hidden from us for a while?</p>
+
+<p>I did not found mentions of GTAO unreal engine since 4.24 in Google and Unreal Source discord, but only people struggling to enable it from time to time. I did some little research, so I hope to make some things clear about it:</p>
+
+<ul>
+  <li>Has been in engine since 4.24.</li>
+  <li>Could be enabled with r.AmbientOcclusion.Method=1.</li>
+  <li>Seems mobile renderer SSAO uses GTAO as default.</li>
+  <li>Used as a part of SSGI(Screen Space Global Illumination).</li>
+  <li>for some reason partially broken as for 4.26 and 4.27, fixed later in unreal engine 5 (did not test earlier than 5.3). Could be fixed by disabling Spatial Filtering.
+    <blockquote>
+      <p>r.GTAO.SpatialFilter=0</p>
+    </blockquote>
+  </li>
+  <li>Spatial Filtering tends to make a look like of original SSAO and also a bit more expensive, so there is not much to lose.</li>
+  <li>Mixing with Volumetric Lightmaps(requires StaticFriction 1.0 inside PP) / Distance Field AO could give promising results.</li>
+  <li>Intensity of Ambient Occlusion inside PostProcess appears not work at all and would just toggle AO state.</li>
+  <li>Much cheaper then original SSAO with my CVars.(did not properly profile but twice at least)</li>
+  <li>you could up quality by increasing r.GTAO.NumAngles and r.GTAO.Downsample=0, but the would become expensive really fast.</li>
+  <li>r.GTAO.FalloffEnd is “distance” of AO. Depends on project it could be higher or lower . tend to make GTAO a bit more expensive</li>
+</ul>
+
+<p>Settings which I used for screenshots and currently use in my project:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[/Script/Engine.RendererSettings]
+;...
+
+r.AmbientOcclusion.Method=1
+r.GTAO.TemporalFilter=1
+r.GTAO.SpatialFilter=0
+r.GTAO.UseNormals=1
+r.GTAO.Combined=0
+r.GTAO.ThicknessBlend=0
+r.GTAO.FalloffEnd=360
+r.GTAO.NumAngles=2
+r.GTAO.Downsample=1
+</code></pre></div></div>
+
+<p>Some image</p>
+
+<p><img src="/assets/GTAOComparison.png" alt="GTAOComparison" /></p>]]></content><author><name></name></author><summary type="html"><![CDATA[some clarification]]></summary></entry><entry><title type="html">Simple and Efficent solution to Texture Repetition</title><link href="http://localhost:4000/2024/12/27/NoTileMemoryEfficentSolution.html" rel="alternate" type="text/html" title="Simple and Efficent solution to Texture Repetition" /><published>2024-12-27T00:00:00+03:00</published><updated>2024-12-27T00:00:00+03:00</updated><id>http://localhost:4000/2024/12/27/NoTileMemoryEfficentSolution</id><content type="html" xml:base="http://localhost:4000/2024/12/27/NoTileMemoryEfficentSolution.html"><![CDATA[<p>Original author 
+<a href="https://iquilezles.org/articles/texturerepetition/">iq</a>
+, Technique III</p>
+
+<p><img src="/assets/IqNoTile.png" alt="IqNoTile" /></p>
+
+<p>MF</p>
+
+<p><img src="/assets/IqNoTileNode.png" alt="iqNoTileNode" /></p>
+
+<div class="language-hlsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//input float2 x UV</span>
+<span class="c1">//input float v Some Offset</span>
+<span class="c1">//input iChannel0 tex base</span>
+<span class="c1">//input iChannel1 tex noise</span>
+
+<span class="c1">//https://iquilezles.org/articles/texturerepetition/</span>
+<span class="c1">//</span>
+<span class="c1">//Technique III</span>
+
+<span class="kt">SamplerState</span> <span class="n">stateq</span> <span class="o">=</span> <span class="n">GetMaterialSharedSampler</span><span class="p">(</span><span class="n">Material</span><span class="p">.</span><span class="n">Texture2D_0Sampler</span><span class="p">,</span><span class="n">Material</span><span class="p">.</span><span class="n">Wrap_WorldGroupSettings</span><span class="p">);</span>
+
+<span class="n">float</span> <span class="n">k</span> <span class="o">=</span> <span class="n">iChannel1</span><span class="p">.</span><span class="n">Sample</span><span class="p">(</span><span class="n">stateq</span> <span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mo">005</span><span class="o">*</span><span class="n">x</span> <span class="p">).</span><span class="n">x</span><span class="p">;</span> <span class="c1">// cheap (cache friendly) lookup</span>
+    
+<span class="kt">float2</span> <span class="n">duvdx</span> <span class="o">=</span> <span class="nb">ddx</span><span class="p">(</span> <span class="n">x</span> <span class="p">);</span>
+<span class="kt">float2</span> <span class="n">duvdy</span> <span class="o">=</span> <span class="nb">ddy</span><span class="p">(</span> <span class="n">x</span> <span class="p">);</span>
+    
+<span class="n">float</span> <span class="n">l</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="mi">8</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+<span class="n">float</span> <span class="n">f</span> <span class="o">=</span> <span class="nb">frac</span><span class="p">(</span><span class="n">l</span><span class="p">);</span>
+
+<span class="c1">//iq one</span>
+<span class="n">float</span> <span class="n">ia</span> <span class="o">=</span> <span class="nb">floor</span><span class="p">(</span><span class="n">l</span><span class="p">);</span> <span class="c1">// my method</span>
+<span class="n">float</span> <span class="n">ib</span> <span class="o">=</span> <span class="n">ia</span> <span class="o">+</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">//suslik one</span>
+<span class="c1">//    float ia = floor(l+0.5); // suslik's method (see comments)</span>
+<span class="c1">//    float ib = floor(l);</span>
+<span class="c1">//    f = min(f, 1.0-f)*2.0;</span>
+  
+
+<span class="kt">float2</span> <span class="n">offa</span> <span class="o">=</span> <span class="nb">sin</span><span class="p">(</span><span class="kt">float2</span><span class="p">(</span><span class="mi">3</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">ia</span><span class="p">);</span> <span class="c1">// can replace with any other hash</span>
+<span class="kt">float2</span> <span class="n">offb</span> <span class="o">=</span> <span class="nb">sin</span><span class="p">(</span><span class="kt">float2</span><span class="p">(</span><span class="mi">3</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">ib</span><span class="p">);</span> <span class="c1">// can replace with any other hash</span>
+
+<span class="kt">float4</span> <span class="n">cola</span> <span class="o">=</span> <span class="n">iChannel0</span><span class="p">.</span><span class="n">SampleGrad</span><span class="p">(</span><span class="n">stateq</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">v</span><span class="o">*</span><span class="n">offa</span><span class="p">,</span> <span class="n">duvdx</span><span class="p">,</span> <span class="n">duvdy</span> <span class="p">);</span>
+<span class="kt">float4</span> <span class="n">colb</span> <span class="o">=</span> <span class="n">iChannel0</span><span class="p">.</span><span class="n">SampleGrad</span><span class="p">(</span><span class="n">stateq</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">v</span><span class="o">*</span><span class="n">offb</span><span class="p">,</span> <span class="n">duvdx</span><span class="p">,</span> <span class="n">duvdy</span> <span class="p">);</span>
+    
+<span class="kt">float4</span> <span class="n">difab</span> <span class="o">=</span> <span class="n">cola</span><span class="o">-</span><span class="n">colb</span><span class="p">;</span>
+
+<span class="c1">//for normal</span>
+<span class="c1">//return UnpackNormalMap(lerp( cola, colb, smoothstep(0.2,0.8,f-0.1*(difab.x+difab.y+difab.z)) ));</span>
+<span class="k">return</span> <span class="nf">lerp</span><span class="p">(</span> <span class="n">cola</span><span class="p">,</span> <span class="n">colb</span><span class="p">,</span> <span class="nb">smoothstep</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">.</span><span class="mi">8</span><span class="p">,</span><span class="n">f</span><span class="o">-</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="o">*</span><span class="p">(</span><span class="n">difab</span><span class="p">.</span><span class="n">x</span><span class="o">+</span><span class="n">difab</span><span class="p">.</span><span class="n">y</span><span class="o">+</span><span class="n">difab</span><span class="p">.</span><span class="n">z</span><span class="p">))</span> <span class="p">);</span>
+</code></pre></div></div>
+
+<p><a href="/assets/MF_AntiRepetitionTextureSample_Technique_3.uasset">Download MF_AntiRepetitionTextureSample_Technique_3.uasset</a></p>]]></content><author><name></name></author><summary type="html"><![CDATA[only 3 Samplers, 40~instructions]]></summary></entry><entry><title type="html">Super Performant Damage Numbers for your game</title><link href="http://localhost:4000/2024/12/27/Super-Efficent-Damage-Numbers-For-ARPG.html" rel="alternate" type="text/html" title="Super Performant Damage Numbers for your game" /><published>2024-12-27T00:00:00+03:00</published><updated>2024-12-27T00:00:00+03:00</updated><id>http://localhost:4000/2024/12/27/Super-Efficent-Damage-Numbers-For-ARPG</id><content type="html" xml:base="http://localhost:4000/2024/12/27/Super-Efficent-Damage-Numbers-For-ARPG.html"><![CDATA[<p>Read 
+<a href="https://dev.epicgames.com/community/learning/tutorials/RJbm/unreal-engine-niagara-data-channels-intro">this</a>
+to have the context.</p>
+
+<p>NiagaraDataChannels could be used not only to efficently spawn explosions, footsteps and dusts, but also for… numbers.</p>
+
+<p><img src="/assets/fastaf.gif" alt="FastAf" /></p>
+
+<p>There is more then 200000 sprite particles of different numbers with different colors and length.
+the question why do we need so much?</p>
+
+<p>idk lol :)</p>
+
+<p><img src="/assets/numberscolored.gif" alt="Numberscolored.gif" /></p>
+
+<p>A bit about how i accomplished this</p>
+<ul>
+  <li>Look and took inspiration from DebugScalarValueNode</li>
+  <li>Passing not only the Value of damage, but also length of “damage”, color and digit(in case we want to render special symbols) in niagara</li>
+  <li>Niagara scales length of sprite plane with length of “damage”</li>
+  <li>Niagara passing some of values to material via ParticleColor and DynamicParameter</li>
+  <li>To render special characters like “!”, lets say when critical strike is accomplished, multipliying damage number by 10 and passing another parameter with digit offset</li>
+</ul>]]></content><author><name></name></author><summary type="html"><![CDATA[or any numbers]]></summary></entry></feed>

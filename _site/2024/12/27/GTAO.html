@@ -1,0 +1,270 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>State of GTAO in Unreal - :3</title>
+<meta name="description" content="some clarification">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content=":3">
+<meta property="og:title" content="State of GTAO in Unreal">
+<meta property="og:url" content="http://localhost:4000/2024/12/27/GTAO.html">
+
+
+  <meta property="og:description" content="some clarification">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2024-12-27T00:00:00+03:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/2024/12/27/GTAO.html">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title=":3 Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          artiliada dev notes
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="State of GTAO in Unreal">
+    <meta itemprop="description" content="some clarification">
+    <meta itemprop="datePublished" content="2024-12-27T00:00:00+03:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="http://localhost:4000/2024/12/27/GTAO.html" itemprop="url">State of GTAO in Unreal
+</a>
+          </h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              
+            </nav>
+          </aside>
+        
+        <p>Unreal engine uses its own in-house solution for Screen Space AO, which is, subjectively, not best fit in every case, but what if I told you, there superior gem hidden from us for a while?</p>
+
+<p>I did not found mentions of GTAO unreal engine since 4.24 in Google and Unreal Source discord, but only people struggling to enable it from time to time. I did some little research, so I hope to make some things clear about it:</p>
+
+<ul>
+  <li>Has been in engine since 4.24.</li>
+  <li>Could be enabled with r.AmbientOcclusion.Method=1.</li>
+  <li>Seems mobile renderer SSAO uses GTAO as default.</li>
+  <li>Used as a part of SSGI(Screen Space Global Illumination).</li>
+  <li>for some reason partially broken as for 4.26 and 4.27, fixed later in unreal engine 5 (did not test earlier than 5.3). Could be fixed by disabling Spatial Filtering.
+    <blockquote>
+      <p>r.GTAO.SpatialFilter=0</p>
+    </blockquote>
+  </li>
+  <li>Spatial Filtering tends to make a look like of original SSAO and also a bit more expensive, so there is not much to lose.</li>
+  <li>Mixing with Volumetric Lightmaps(requires StaticFriction 1.0 inside PP) / Distance Field AO could give promising results.</li>
+  <li>Intensity of Ambient Occlusion inside PostProcess appears not work at all and would just toggle AO state.</li>
+  <li>Much cheaper then original SSAO with my CVars.(did not properly profile but twice at least)</li>
+  <li>you could up quality by increasing r.GTAO.NumAngles and r.GTAO.Downsample=0, but the would become expensive really fast.</li>
+  <li>r.GTAO.FalloffEnd is “distance” of AO. Depends on project it could be higher or lower . tend to make GTAO a bit more expensive</li>
+</ul>
+
+<p>Settings which I used for screenshots and currently use in my project:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[/Script/Engine.RendererSettings]
+;...
+
+r.AmbientOcclusion.Method=1
+r.GTAO.TemporalFilter=1
+r.GTAO.SpatialFilter=0
+r.GTAO.UseNormals=1
+r.GTAO.Combined=0
+r.GTAO.ThicknessBlend=0
+r.GTAO.FalloffEnd=360
+r.GTAO.NumAngles=2
+r.GTAO.Downsample=1
+</code></pre></div></div>
+
+<p>Some image</p>
+
+<p><img src="/assets/GTAOComparison.png" alt="GTAOComparison" /></p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2024-12-27T00:00:00+03:00">December 27, 2024</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2024/12/27/Did-pcg-so-you-dont-have-to.html" class="pagination--pager" title="Did a little PCG, so you don’t have to.
+">Previous</a>
+    
+    
+      <a href="/2024/12/27/NoTileMemoryEfficentSolution.html" class="pagination--pager" title="Simple and Efficent solution to Texture Repetition
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="http://localhost:4000">:3</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
