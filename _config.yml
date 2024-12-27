@@ -14,7 +14,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: ":3"
-masthead_title: "artiliada dev notes"
+masthead_title: "🔥 artiliada dev notes"
 email: "arturshtiknov@gmail.com"
 description: "me"
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -23,8 +23,8 @@ twitter_username: what
 github_username: Artieeeee
 
 # Build settings
-markdown: kramdown
-theme: minimal-mistakes-jekyll
+#markdown: kramdown
+#theme: minimal-mistakes-jekyll
 #minimal_mistakes_skin: "dirt"
 
 #remote_theme: "landelare/minimal-mistakes@1a85a2868528f97ea631b71157b004665b29b422"
