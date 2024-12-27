@@ -11,10 +11,10 @@ NiagaraDataChannels could be used not only to efficently spawn explosions, foots
 
 ![FastAf](/assets/fastaf.gif)
 
-There is more then 200000 sprite particles of different numbers with different colors and length.
-the question why do we need so much? 
+There is more then 230000 sprite particles of different numbers with different colors and length.
+The question, why do we need so much???
 
-idk lol :)
+Idk 😂
 
 ![Numberscolored.gif](/assets/numberscolored.gif)
 
