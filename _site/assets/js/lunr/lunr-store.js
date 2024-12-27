@@ -18,7 +18,7 @@ var store = [{
         "teaser": null
       },{
         "title": "Super Performant Damage Numbers for your game",
-        "excerpt":"Read this to have the context. NiagaraDataChannels could be used not only to efficently spawn explosions, footsteps and dusts, but also for… numbers. There is more then 200000 sprite particles of different numbers with different colors and length. the question why do we need so much? idk lol :) A...","categories": [],
+        "excerpt":"Read this to have the context. NiagaraDataChannels could be used not only to efficently spawn explosions, footsteps and dusts, but also for… numbers. There is more then 200000 sprite particles of different numbers with different colors and length. The question, why do we need so much??? Idk 😂 A bit...","categories": [],
         "tags": [],
         "url": "/2024/12/27/Super-Efficent-Damage-Numbers-For-ARPG.html",
         "teaser": null

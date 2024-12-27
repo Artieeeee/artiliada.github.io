@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-12-28T00:16:38+03:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">:3</title><subtitle>me</subtitle><entry><title type="html">Did a little PCG, so you don’t have to.</title><link href="http://localhost:4000/2024/12/27/Did-pcg-so-you-dont-have-to.html" rel="alternate" type="text/html" title="Did a little PCG, so you don’t have to." /><published>2024-12-27T00:00:00+03:00</published><updated>2024-12-27T00:00:00+03:00</updated><id>http://localhost:4000/2024/12/27/Did-pcg-so-you-dont-have-to</id><content type="html" xml:base="http://localhost:4000/2024/12/27/Did-pcg-so-you-dont-have-to.html"><![CDATA[<p>Made a simple PCG Graph, pretending to be “Grass landscape framework 2.0”. You could use this as replacement or use both with conventional method.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-12-28T02:46:10+03:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">:3</title><subtitle>me</subtitle><entry><title type="html">Did a little PCG, so you don’t have to.</title><link href="http://localhost:4000/2024/12/27/Did-pcg-so-you-dont-have-to.html" rel="alternate" type="text/html" title="Did a little PCG, so you don’t have to." /><published>2024-12-27T00:00:00+03:00</published><updated>2024-12-27T00:00:00+03:00</updated><id>http://localhost:4000/2024/12/27/Did-pcg-so-you-dont-have-to</id><content type="html" xml:base="http://localhost:4000/2024/12/27/Did-pcg-so-you-dont-have-to.html"><![CDATA[<p>Made a simple PCG Graph, pretending to be “Grass landscape framework 2.0”. You could use this as replacement or use both with conventional method.
 This can cover all collidable surfaces in the world, not only landscapes. 
 Cull by hit phys material and landscape layer, weight distribute meshes, spawn grass from down to up.</p>
 
@@ -113,9 +113,9 @@ to have the context.</p>
 <p><img src="/assets/fastaf.gif" alt="FastAf" /></p>
 
 <p>There is more then 200000 sprite particles of different numbers with different colors and length.
-the question why do we need so much?</p>
+The question, why do we need so much???</p>
 
-<p>idk lol :)</p>
+<p>Idk 😂</p>
 
 <p><img src="/assets/numberscolored.gif" alt="Numberscolored.gif" /></p>
 
