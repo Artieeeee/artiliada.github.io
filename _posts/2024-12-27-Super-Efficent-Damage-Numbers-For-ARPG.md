@@ -1,6 +1,6 @@
 ---
 title:  "Super Performant Damage Numbers for your game"
-excerpt: "Niagara Data Channel"
+excerpt: "or any numbers"
 ---
 
 Read 
@@ -23,4 +23,4 @@ A bit about how i accomplished this
 * Passing not only the Value of damage, but also length of "damage", color and digit(in case we want to render special symbols) in niagara
 * Niagara scales length of sprite plane with length of "damage"
 * Niagara passing some of values to material via ParticleColor and DynamicParameter
-* To render special characters like "!" when crit is accomplished, we multipliying damage number by 10 and passing another parameter with digit offset
+* To render special characters like "!", lets say when critical strike is accomplished, multipliying damage number by 10 and passing another parameter with digit offset

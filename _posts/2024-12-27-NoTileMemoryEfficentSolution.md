@@ -1,6 +1,6 @@
 ---
 title:  "Simple and Efficent solution to Texture Repetition"
-excerpt: "Only 3 Samplers, 40~instructions"
+excerpt: "only 3 Samplers, 40~instructions"
 --- 
 
 Original author 
