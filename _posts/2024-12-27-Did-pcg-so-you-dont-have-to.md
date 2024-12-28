@@ -18,4 +18,4 @@ Also the little silly gif from my game as demonstration.
 ![PCG Demonstration](/assets/pcggifcool.gif)
 
 Download link, compatible with UE 5.5:
-[Link]((/assets/PCG_InstancedGrass.uasset))
+[Link](/assets/PCG_InstancedGrass.uasset)
