@@ -24,8 +24,9 @@ github_username: Artieeeee
 
 # Build settings
 #markdown: kramdown
-theme: minima
+#theme: minima
 #theme: minimal-mistakes-jekyll
+remote_theme: "mmistakes/minimal-mistakes@4.26.2"
 #minimal_mistakes_skin: "dirt"
 
 #remote_theme: "landelare/minimal-mistakes@1a85a2868528f97ea631b71157b004665b29b422"
